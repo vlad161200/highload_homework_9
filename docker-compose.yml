@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  percona:
+    image: percona:8.0
+    container_name: percona_innodb
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: database
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - ./percona_data:/var/lib/mysql
+      - ./custom_percona.cnf:/etc/mysql/conf.d/custom_percona.cnf
+    ports:
+      - "3306:3306"
+    command: --default-storage-engine=INNODB
+    platform: linux/amd64
+  postgres:
+    image: postgres:13.3
+    container_name: postgres_db
+    restart: always
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: database
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
